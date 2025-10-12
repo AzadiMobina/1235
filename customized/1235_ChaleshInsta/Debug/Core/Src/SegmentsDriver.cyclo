@@ -1,0 +1,4 @@
+../Core/Src/SegmentsDriver.c:13:6:Segments_Scan	9
+../Core/Src/SegmentsDriver.c:64:6:Segment_Map	25
+../Core/Src/SegmentsDriver.c:298:6:Segment_Set	1
+../Core/Src/SegmentsDriver.c:304:9:GET_DOW	8

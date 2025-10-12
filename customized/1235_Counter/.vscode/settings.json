@@ -1,0 +1,11 @@
+{
+      "files.associations": {
+            "main.h": "c",
+            "adc.h": "c",
+            "i2c.h": "c",
+            "ntc.h": "c",
+            "initialization.h": "c",
+            "definition.h": "c",
+            "generalremoote.h": "c"
+      }
+}

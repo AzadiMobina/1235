@@ -1,0 +1,14 @@
+../Core/Inc/DS3231.h:17:9:BCD_to_Decimal	1
+../Core/Inc/DS3231.h:21:9:Decimal_to_BCD	1
+../Core/Inc/DS3231.h:25:6:DS3231_WriteTime	1
+../Core/Inc/DS3231.h:36:6:DS3231_ReadTime	1
+../Core/Inc/DS3231.h:47:6:DS3231_WriteCalendar	1
+../Core/Inc/DS3231.h:59:6:DS3231_ReadCalendar	1
+../Core/Inc/DS3231.h:72:6:DS3231_EnableSQW1Hz	1
+../Core/Inc/DS3231.h:96:7:gregorian_to_jalali	5
+../Core/Inc/DS3231.h:122:7:jalali_to_gregorian	11
+../Core/Inc/DS3231.h:151:6:Date_Update	1
+../Core/Src/main.c:71:5:main	19
+../Core/Src/main.c:1983:6:SystemClock_Config	4
+../Core/Src/main.c:2026:6:Time_Update	9
+../Core/Src/main.c:2083:6:Error_Handler	1

@@ -1,0 +1,4 @@
+../Core/Src/SegmentsDriver.c:13:6:Segments_Scan	8	static
+../Core/Src/SegmentsDriver.c:65:6:Segment_Map	16	static
+../Core/Src/SegmentsDriver.c:326:6:Segment_Set	16	static
+../Core/Src/SegmentsDriver.c:333:9:GET_DOW	24	static

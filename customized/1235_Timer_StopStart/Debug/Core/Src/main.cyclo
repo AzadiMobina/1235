@@ -1,0 +1,5 @@
+../Core/Inc/Initialization.h:23:6:Buzz	2
+../Core/Src/main.c:73:5:main	9
+../Core/Src/main.c:181:6:SystemClock_Config	4
+../Core/Src/main.c:225:6:Time_Update	5
+../Core/Src/main.c:251:6:Error_Handler	1

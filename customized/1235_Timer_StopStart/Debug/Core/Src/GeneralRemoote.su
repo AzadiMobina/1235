@@ -1,0 +1,10 @@
+../Core/Inc/DS3231.h:17:9:BCD_to_Decimal	16	static
+../Core/Inc/DS3231.h:21:9:Decimal_to_BCD	16	static
+../Core/Inc/DS3231.h:25:6:DS3231_WriteTime	40	static
+../Core/Inc/DS3231.h:36:6:DS3231_ReadTime	48	static
+../Core/Inc/DS3231.h:47:6:DS3231_WriteCalendar	40	static
+../Core/Inc/DS3231.h:59:6:DS3231_ReadCalendar	48	static
+../Core/Inc/DS3231.h:72:6:DS3231_EnableSQW1Hz	40	static
+../Core/Inc/DS3231.h:96:7:gregorian_to_jalali	96	static
+../Core/Inc/DS3231.h:122:7:jalali_to_gregorian	96	static
+../Core/Src/GeneralRemoote.c:16:9:Haamin_NumberKey	16	static

@@ -1,0 +1,712 @@
+/*
+ * GeneralRemoote.c
+ *
+ *  Created on: Feb 15, 2025
+ *      Author: Mobina
+ */
+#include "GeneralRemoote.h"
+
+
+uint8_t valuSetting_tmp = 0;
+uint8_t valueNumber = 0;
+uint8_t valueFeedback = 0;
+uint8_t muteFlag = 1;
+
+void Haamin_Remote(uint16_t action, uint8_t workMode)
+{
+    
+    #ifdef SIMPLE
+        if(workMode == MODE_NORMAL)
+        {
+            if(action == INFO)
+            {
+                work_Mode = TIME_SETTING;
+                time_Mode = SET_HOUR;
+                timeValue = time_Hour;
+            }
+            else if(action == MUTE)
+            {
+                if(muteFlag)
+                    muteFlag = 0;
+                else
+                    muteFlag = 1;
+            }
+            else if(action == ON_OFF)
+            {
+                work_Mode = MODE_OFF;
+            }
+            else if(action == PgDn)
+            {
+                if(tmpShow == 0)
+                {
+                    tmpShow = 1;
+                    time_TmpShow = 0;
+                    Buzz(50);
+                    HAL_Delay(50);
+                    Buzz(50);
+                }
+                else 
+                {
+                    if(time_TmpShow < 5)
+                        tmpShow = 0;
+                    else
+                        time_TmpShow = 0;
+                }
+            }
+        }
+        else if(workMode == MODE_OFF)
+        {
+            if(action == ON_OFF)
+            {
+                work_Mode = MODE_NORMAL;
+            }
+        }
+        else if(workMode == TIME_SETTING)
+        {
+            if(action == INCREASE)
+            {
+                if(time_Mode == SET_HOUR)
+                {
+                    if(++timeValue > 23)
+                    timeValue = 0;
+                }
+                else
+                {
+                    if(++timeValue > 59)
+                    timeValue = 0;
+                }
+            }
+            else if(action == DECREASE)
+            {
+                if(time_Mode == SET_HOUR)
+                {
+                    if(timeValue == 0)
+                    timeValue = 23;
+                    else
+                    timeValue--;
+                }
+                else
+                {
+                    if(timeValue == 0)
+                    timeValue = 59;
+                    else
+                    timeValue--;
+                }
+            }
+            else if(action == EXIT_KEY)
+            {
+                work_Mode = MODE_NORMAL;
+            }
+            else if(action == OK_KEY)
+            {
+                if(time_Mode == SET_HOUR)
+                {
+                    time_Hour_t = timeValue;
+                    time_Mode = SET_MIN;
+                    timeValue = time_Minute;
+                }
+                else if(time_Mode == SET_MIN)
+                {
+                    time_Minute = timeValue;
+                    time_Hour = time_Hour_t;
+                    time_Mode = SET_HOUR;
+                    time_Second = 0;
+
+                    work_Mode = MODE_NORMAL;
+                    //DS3231_WriteTime(&hi2c2, time_Hour,time_Minute,0);
+                }
+            }
+            else if((action == KEY_0 ) || (action == KEY_1) || (action == KEY_2) || (action == KEY_3) || (action == KEY_4) || (action == KEY_5) || (action == KEY_6) || (action == KEY_7) || (action == KEY_8) || (action == KEY_9))
+            {
+                valueFeedback = Haamin_NumberKey(action);
+                timeValue = ((valuSetting_tmp * 10) + valueFeedback);
+                valuSetting_tmp = valueFeedback;
+            }
+
+        }
+    #elif  EDARI
+        if(workMode == MODE_NORMAL)
+        {
+            if(action == INFO)
+            {
+                work_Mode = TIME_SETTING;
+                time_Mode = SET_HOUR;
+                timeValue = time_Hour;
+            }
+            else if(action == MENU_KEY)
+            {
+                work_Mode = DATE_SETTING;
+                date_Mode = SET_YEAR;
+                dateValue = pdate_Year;
+                dateMounth_t = pdate_Mounth;
+                dateDay_t = pdate_Day;
+                dateWeek_t = date_Week;
+            }
+            else if(action == MUTE)
+            {
+                if(muteFlag)
+                    muteFlag = 0;
+                else
+                    muteFlag = 1;
+            }
+            // else if(action == ON_OFF)
+            // {
+            //     work_Mode = MODE_OFF;
+            // }
+            else if(action == PgDn)
+            {
+                if(tmpShow == 0)
+                {
+                    tmpShow = 1;
+                    time_TmpShow = 0;
+                    time_DateShow = 0;
+                    Buzz(50);
+                    HAL_Delay(50);
+                    Buzz(50);
+                }
+                else 
+                {
+                    if(time_TmpShow < 5)
+                        tmpShow = 0;
+                    else
+                    {
+                        time_TmpShow = 0;
+                        time_DateShow = 0;
+                    }
+                }
+            }
+            else if(action == PgUp)
+            {
+                time_TmpShow = 10;
+                time_DateShow = 10;
+            }
+            Buzz(100);
+        }
+        else if(workMode == MODE_OFF)
+        {
+            if(action == ON_OFF)
+            {
+                work_Mode = MODE_NORMAL;
+            }
+            Buzz(100);
+        }
+        else if(workMode == TIME_SETTING)
+        {
+            if(action == INCREASE)
+            {
+                if(time_Mode == SET_HOUR)
+                {
+                    if(++timeValue > 23)
+                    timeValue = 0;
+                }
+                else
+                {
+                    if(++timeValue > 59)
+                    timeValue = 0;
+                }
+            }
+            else if(action == DECREASE)
+            {
+                if(time_Mode == SET_HOUR)
+                {
+                    if(timeValue == 0)
+                    timeValue = 23;
+                    else
+                    timeValue--;
+                }
+                else
+                {
+                    if(timeValue == 0)
+                    timeValue = 59;
+                    else
+                    timeValue--;
+                }
+            }
+            else if(action == EXIT_KEY)
+            {
+                work_Mode = MODE_NORMAL;
+            }
+            else if(action == OK_KEY)
+            {
+                if(time_Mode == SET_HOUR)
+                {
+                    time_Hour_t = timeValue;
+                    time_Mode = SET_MIN;
+                    timeValue = time_Minute;
+                }
+                else if(time_Mode == SET_MIN)
+                {
+                    time_Minute = timeValue;
+                    time_Hour = time_Hour_t;
+                    time_Second = 0;
+                    work_Mode = MODE_NORMAL;
+                    DS3231_WriteTime(&hi2c2, time_Hour,time_Minute,0);
+                }
+            }
+            else if((action == KEY_0 ) || (action == KEY_1) || (action == KEY_2) || (action == KEY_3) || (action == KEY_4) || (action == KEY_5) || (action == KEY_6) || (action == KEY_7) || (action == KEY_8) || (action == KEY_9))
+            {
+                valueFeedback = Haamin_NumberKey(action);
+                timeValue = ((valuSetting_tmp * 10) + valueFeedback);
+                valuSetting_tmp = valueFeedback;
+                if(time_Mode == SET_HOUR) {  
+                  if(timeValue > 23) timeValue = 23;}
+                else if(time_Mode == SET_MIN){
+                  if(timeValue > 59) timeValue = 59;} 
+            }
+            Buzz(100);
+        }
+        else if(workMode == DATE_SETTING)
+        {
+            if(action == INCREASE)
+            {
+                if(date_Mode == SET_YEAR)
+                {
+                    if(++dateValue > 99)
+                        dateValue = 0;
+                }
+                else if(date_Mode == SET_MOTH)
+                {
+                    if(++dateValue > 12)
+                        dateValue = 1;
+                }
+                else if(date_Mode == SET_DAY)
+                {
+                    if(++dateValue > 31)
+                        dateValue = 1;
+                }
+                else if(date_Mode == SET_DOW)
+                {
+                    if(++dateValue > 7)
+                        dateValue = 1;
+                }
+            
+            }
+            else if(action == DECREASE)
+            {
+                if(date_Mode == SET_YEAR)
+                {
+                    if(dateValue == 0)
+                        dateValue = 99;
+                    else
+                        dateValue--;
+                }
+                else if(date_Mode == SET_MOTH)
+                {
+                    if(dateValue == 1)
+                        dateValue = 12;
+                    else
+                        dateValue--;
+                }
+                else if(date_Mode == SET_DAY)
+                {
+                    if(dateValue == 1)
+                        dateValue = 31;
+                    else
+                        dateValue--;
+                }
+                else if(date_Mode == SET_DOW)
+                {
+                    if(dateValue == 1)
+                        dateValue = 7;
+                    else
+                        dateValue--;
+                }
+            
+            }
+            else if(action == MUTE)
+            {
+                if(muteFlag)
+                    muteFlag = 0;
+                else
+                    muteFlag = 1;
+            }
+            else if (action == OK_KEY)
+            {
+                if(date_Mode == SET_YEAR)
+                {
+                    dateYear_t = dateValue;
+                    date_Mode = SET_MOTH;
+                    dateValue = dateMounth_t;
+                }
+                else if(date_Mode == SET_MOTH)
+                {
+                    dateMounth_t = dateValue;
+                    date_Mode = SET_DAY;
+                    dateValue = dateDay_t;
+                }
+                else if(date_Mode == SET_DAY)
+                {
+                    dateDay_t = dateValue;
+                    pdate_Day = dateDay_t;
+                    pdate_Mounth = dateMounth_t;
+                    pdate_Year = dateYear_t;
+                    jalali_to_gregorian((1400+pdate_Year),pdate_Mounth,pdate_Day,miladi_Calender);
+                    gdate_Year = (uint16_t)miladi_Calender[0];
+                    gdate_Year = gdate_Year - 2000;
+                    gdate_Mounth = (uint16_t)miladi_Calender[1];
+                    gdate_Day = (uint16_t)miladi_Calender[2];
+                    DS3231_WriteCalendar(&hi2c2,gdate_Year,gdate_Mounth,gdate_Day,date_Week);
+                    work_Mode = MODE_NORMAL;
+                    send_Flag = 1;
+                }
+            }
+            else if (action == EXIT_KEY)
+            {
+                work_Mode = MODE_NORMAL;
+                Buzz(50);
+                HAL_Delay(50);
+            }
+            else if((action == KEY_0 ) || (action == KEY_1) || (action == KEY_2) || (action == KEY_3) || (action == KEY_4) || (action == KEY_5) || (action == KEY_6) || (action == KEY_7) || (action == KEY_8) || (action == KEY_9))
+            {
+                valueFeedback = Haamin_NumberKey(action);
+                dateValue = ((valuSetting_tmp * 10) + valueFeedback);
+                valuSetting_tmp = valueFeedback;
+                if(date_Mode == SET_MOTH) {  
+                  if(dateValue > 12) dateValue = 12;}
+                else if(date_Mode == SET_DAY){
+                  if(dateValue > 31) dateValue = 31;} 
+                else if(date_Mode == SET_DOW){
+                    if(dateValue > 8) dateValue = 7;}
+            }
+            Buzz(100);
+        }
+    #elif   CROSS
+
+    #elif   BASHGHAHI
+        if(workMode == MODE_NORMAL)
+        {
+            if(action == INFO)
+            {
+                work_Mode = TIME_SETTING;
+                time_Mode = SET_HOUR;
+                timeValue = time_Hour;
+            }
+            else if(action == MUTE)
+            {
+                if(muteFlag)
+                    muteFlag = 0;
+                else
+                    muteFlag = 1;
+            }
+            else if(action == ON_OFF)
+            {
+                work_Mode = MODE_OFF;
+            }
+            else if(action == PgDn)
+            {
+                if(tmpShow == 0)
+                {
+                    tmpShow = 1;
+                    time_TmpShow = 0;
+                    Buzz(50);
+                    HAL_Delay(50);
+                    Buzz(50);
+                }
+                else 
+                {
+                    if(time_TmpShow < 5)
+                        tmpShow = 0;
+                    else
+                        time_TmpShow = 0;
+                }
+            }
+            else if(action == UP_TIMER_KEY)
+            {
+                work_Mode = UP_TIMER;
+            }
+            else if(action == DN_TIMER_KEY)
+            {
+                work_Mode = DN_TIMER;
+            }
+        }
+        else if(workMode == MODE_OFF)
+        {
+            if(action == ON_OFF)
+            {
+                work_Mode = MODE_NORMAL;
+            }
+        }
+        else if(workMode == TIME_SETTING)
+        {
+            if(action == INCREASE)
+            {
+                if(time_Mode == SET_HOUR)
+                {
+                    if(++timeValue > 23)
+                    timeValue = 0;
+                }
+                else
+                {
+                    if(++timeValue > 59)
+                    timeValue = 0;
+                }
+            }
+            else if(action == DECREASE)
+            {
+                if(time_Mode == SET_HOUR)
+                {
+                    if(timeValue == 0)
+                    timeValue = 23;
+                    else
+                    timeValue--;
+                }
+                else
+                {
+                    if(timeValue == 0)
+                    timeValue = 59;
+                    else
+                    timeValue--;
+                }
+            }
+            else if(action == EXIT_KEY)
+            {
+                work_Mode = MODE_NORMAL;
+            }
+            else if(action == OK_KEY)
+            {
+                if(time_Mode == SET_HOUR)
+                {
+                    time_Hour_t = timeValue;
+                    time_Mode = SET_MIN;
+                    timeValue = time_Minute;
+                }
+                else if(time_Mode == SET_MIN)
+                {
+                    time_Minute = timeValue;
+                    time_Hour = time_Hour_t;
+                    time_Mode = SET_HOUR;
+                    time_Second = 0;
+                    work_Mode = MODE_NORMAL;
+                    DS3231_WriteTime(&hi2c2, time_Hour,time_Minute,0);
+                }
+            }
+            else if((action == KEY_0 ) || (action == KEY_1) || (action == KEY_2) || (action == KEY_3) || (action == KEY_4) || (action == KEY_5) || (action == KEY_6) || (action == KEY_7) || (action == KEY_8) || (action == KEY_9))
+            {
+                valueFeedback = Haamin_NumberKey(action);
+                timeValue = ((valuSetting_tmp * 10) + valueFeedback);
+                valuSetting_tmp = valueFeedback;
+            }
+        }
+        else if(workMode == UP_TIMER)
+        {
+            if(timer_Mode == SETTING)
+            {
+                if(action == INCREASE)
+                {
+                    if(++timer_Value > 99)
+                        timer_Value = 0;
+                }
+                else if(action == DECREASE)
+                {
+                    if(timer_Value == 0)
+                        timer_Value = 99;
+                    else
+                        timer_Value--;
+                }
+                else if(action == MUTE)
+                {
+                    if(muteFlag)
+                        muteFlag = 0;
+                    else
+                        muteFlag = 1;
+                }
+                else if (action == OK_KEY)
+                {
+                    upTime_Minute = timer_Value;
+                    upTime_Minute = upTime_Minute;
+                    timer_Mode = MAIN_FUNCTION;
+                }
+                else if (action == EXIT_KEY)
+                {
+                    timer_Mode = MAIN_FUNCTION;
+                    Buzz(50);
+                    HAL_Delay(50);
+                }
+                else if((action == KEY_0 ) || (action == KEY_1) || (action == KEY_2) || (action == KEY_3) || (action == KEY_4) || (action == KEY_5) || (action == KEY_6) || (action == KEY_7) || (action == KEY_8) || (action == KEY_9))
+                {
+                    valueFeedback = Haamin_NumberKey(action);
+                    timer_Value = ((valuSetting_tmp * 10) + valueFeedback);
+                    valuSetting_tmp = valueFeedback; 
+                }
+            }
+            else 
+            {
+                if(action == MUTE)
+                {
+                    if(muteFlag)
+                        muteFlag = 0;
+                    else
+                        muteFlag = 1;
+                }
+
+                else if(action == INFO)
+                {
+                    timer_Mode = SETTING;
+                    timer_Value = upTime_Minute;
+                    timer_Run = 0;
+                }
+                else if(action == RESET_KEY)
+                {
+                    upTime_Minute = 0;
+                    upTime_Second = 0;
+                    timer_SrUpEn = 1;
+                    timer_Run = 0;
+                    timer_TimeStarting = 11;
+                    timer_StartUp = 0;
+                }
+                else if(action == PLAY_KEY)
+                {
+                    timer_StartUp = 0;
+                    timer_Run = 1;
+                }
+                else if(action == PUSE_KEY)
+                {
+                    timer_StartUp = 0;
+                    timer_Run = 0;
+                }
+                else if(action == EXIT_KEY)
+                {
+                    timer_SrUpEn = 1;
+                    timer_StartUp = 0;
+                    timer_Run = 0;
+                    upTime_Minute = 0;
+                    upTime_Second = 0;
+                    work_Mode = MODE_NORMAL;
+                    Buzz(50);
+                    HAL_Delay(50);
+                }
+                
+            }           
+            Buzz(100);
+        }
+        else if(workMode == DN_TIMER) 
+        {
+            if(timer_Mode == SETTING)
+            {
+                if(action == INCREASE)
+                {
+                    if(++timer_Value > 99)
+                        timer_Value = 0;
+                }
+                else if(action == DECREASE)
+                {
+                    if(timer_Value == 0)
+                        timer_Value = 99;
+                    else
+                        timer_Value--;
+                }
+                else if(action == MUTE)
+                {
+                    if(muteFlag)
+                        muteFlag = 0;
+                    else
+                        muteFlag = 1;
+                }
+                else if (action == OK_KEY)
+                {
+                    dnTime_Minute = timer_Value;
+                    dnTime_Minute_Defult = dnTime_Minute;
+                    timer_Mode = MAIN_FUNCTION;
+                }
+                else if (action == EXIT_KEY)
+                {
+                    timer_Mode = MAIN_FUNCTION;
+                    Buzz(50);
+                    HAL_Delay(50);
+                }
+                else if((action == KEY_0 ) || (action == KEY_1) || (action == KEY_2) || (action == KEY_3) || (action == KEY_4) || (action == KEY_5) || (action == KEY_6) || (action == KEY_7) || (action == KEY_8) || (action == KEY_9))
+                {
+                    valueFeedback = Haamin_NumberKey(action);
+                    timer_Value = ((valuSetting_tmp * 10) + valueFeedback);
+                    valuSetting_tmp = valueFeedback; 
+                }
+            }
+            else 
+            {
+                if(action == MUTE)
+                {
+                    if(muteFlag)
+                        muteFlag = 0;
+                    else
+                        muteFlag = 1;
+                }
+
+                else if(action == INFO)
+                {
+                    timer_Mode = SETTING;
+                    timer_Value = dnTime_Minute;
+                    timer_Run = 0;
+                }
+                else if(action == RESET_KEY)
+                {
+                    dnTime_Minute = 0;
+                    dnTime_Second = 0;
+                    timer_Run = 0;
+                    timer_TimeStarting = 11;
+                    timer_StartUp = 1;
+                }
+                else if(action == PLAY_KEY)
+                {
+                    timer_StartUp = 0;
+                    timer_Run = 1;
+                }
+                else if(action == PUSE_KEY)
+                {
+                    timer_StartUp = 0;
+                    timer_Run = 0;
+                }
+                else if(action == EXIT_KEY)
+                {
+                    timer_StartUp = 0;
+                    timer_Run = 0;
+                    dnTime_Minute = 0;
+                    dnTime_Second = 0;
+                    work_Mode = MODE_NORMAL;
+                    Buzz(50);
+                    HAL_Delay(50);
+                }
+            }           
+            Buzz(100);
+        }   
+    #endif
+}
+
+uint8_t Haamin_NumberKey (uint16_t numberKey)
+{
+    if(numberKey == KEY_0)
+        valueNumber = 0;
+    else if(numberKey == KEY_1)
+        valueNumber = 1;
+    else if(numberKey == KEY_2)
+        valueNumber = 2;
+    else if(numberKey == KEY_3)
+        valueNumber = 3;
+    else if(numberKey == KEY_4)
+        valueNumber = 4;
+    else if(numberKey == KEY_5)
+        valueNumber = 5;
+    else if(numberKey == KEY_6)
+        valueNumber = 6;
+    else if(numberKey == KEY_7)
+        valueNumber = 7;
+    else if(numberKey == KEY_8)
+        valueNumber = 8;
+    else if(numberKey == KEY_9)
+        valueNumber = 9;
+
+    return valueNumber;
+
+}
+
+
+void Buzz(uint16_t time)
+{
+  if(muteFlag)
+  {
+    HAL_GPIO_WritePin(Buzzer_GPIO_Port, Buzzer_Pin, GPIO_PIN_SET);
+    HAL_Delay(time);
+    HAL_GPIO_WritePin(Buzzer_GPIO_Port, Buzzer_Pin, GPIO_PIN_RESET);
+  }
+}
+
+

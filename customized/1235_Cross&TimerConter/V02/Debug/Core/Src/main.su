@@ -1,0 +1,10 @@
+../Core/Inc/DS3231.h:17:9:BCD_to_Decimal	16	static
+../Core/Inc/DS3231.h:21:9:Decimal_to_BCD	16	static
+../Core/Inc/DS3231.h:25:6:DS3231_WriteTime	40	static
+../Core/Inc/DS3231.h:36:6:DS3231_ReadTime	48	static
+../Core/Inc/DS3231.h:48:6:DS3231_EnableSQW1Hz	40	static
+../Core/Src/main.c:71:5:main	16	static
+../Core/Src/main.c:1262:6:SystemClock_Config	88	static
+../Core/Src/main.c:1306:6:Time_Update	8	static
+../Core/Src/main.c:1360:6:TimerCounter_Mode	4	static
+../Core/Src/main.c:1378:6:Error_Handler	4	static,ignoring_inline_asm

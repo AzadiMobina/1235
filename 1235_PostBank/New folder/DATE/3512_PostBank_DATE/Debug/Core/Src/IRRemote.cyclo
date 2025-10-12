@@ -1,0 +1,4 @@
+../Core/Src/IRRemote.c:17:6:IR_SetTimeArrayValues	5
+../Core/Src/IRRemote.c:40:10:Ir_AnalyzeTimeArrayValues	10
+../Core/Src/IRRemote.c:75:10:Ir_GetData	2
+../Core/Src/IRRemote.c:86:6:Ir_ResetRunning	1
