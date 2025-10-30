@@ -100,8 +100,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT(&htim2);
   HAL_TIM_Base_Start_IT(&htim3);
-  DS3231_ReadTime(&hi2c2, &time_Hour, &time_Minute, &time_Second);
-  DS3231_EnableSQW1Hz(&hi2c2);
+
   for (int i = 0; i < 10; i++)
   {
     Segment_Set(0, i);
@@ -114,7 +113,27 @@ int main(void)
     HAL_Delay(200);
     HAL_GPIO_WritePin(blinky_Point, HIGH);
     HAL_GPIO_WritePin(date_Point, LOW);
+    Buzz(100); HAL_Delay(200); Buzz(100);
   }
+  
+  if (HAL_I2C_IsDeviceReady(&hi2c2, 0xD0, 3, 100) == HAL_OK)
+  {
+    DS3231_ReadTime(&hi2c2, &time_Hour, &time_Minute, &time_Second);
+    DS3231_EnableSQW1Hz(&hi2c2);
+  }
+  else
+  {
+    time_Hour = 0;
+    time_Minute = 0;
+    time_Second = 0;
+
+    for (int i = 0; i < 3; i++)
+    {
+      Buzz(300);
+      HAL_Delay(100);
+    }
+  }
+  
   
   #ifdef EDAR
     for(int i = 0; i< 8; i++)

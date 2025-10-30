@@ -21,7 +21,7 @@ uint8_t timeValue = 0;
 uint16_t irRemote = 0;
 uint8_t position_Level = 7;
 
-uint8_t tmpShow = 1;
+uint8_t tmpShow = 0;
 uint8_t temp_Read = 0;
 uint8_t time_TmpShow = 0;
 uint8_t time_DateShow = 0;

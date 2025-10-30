@@ -60,8 +60,8 @@ all: main-build
 main-build: 1535_Clock.elf secondary-outputs
 
 # Tool invocations
-1535_Clock.elf 1535_Clock.map: $(OBJS) $(USER_OBJS) E:\STM32\1235\customized\1235_Cross&TimerConter\V02\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "1535_Clock.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"E:\STM32\1235\customized\1235_Cross&TimerConter\V02\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="1535_Clock.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+1535_Clock.elf 1535_Clock.map: $(OBJS) $(USER_OBJS) E:\STM32\1235\1235\customized\1235_Cross&TimerConter\V02\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "1535_Clock.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"E:\STM32\1235\1235\customized\1235_Cross&TimerConter\V02\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="1535_Clock.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
